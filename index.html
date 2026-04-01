@@ -482,6 +482,63 @@
   .page-hero h1 { font-size: clamp(2.5rem,5vw,4.5rem); color: var(--cream); font-weight: 300; }
   .page-hero span { font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 10px; }
 
+  /* ── CHECKOUT ── */
+  .co-step {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    flex:0 0 auto;
+  }
+  .co-step-num {
+    width:34px; height:34px; border-radius:50%;
+    border:2px solid var(--gold-light);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem; font-weight:400; color:var(--warm-grey);
+    background:var(--white); transition:all 0.3s;
+  }
+  .co-step.active .co-step-num { background:var(--espresso); border-color:var(--espresso); color:var(--cream); }
+  .co-step.done .co-step-num { background:var(--rose); border-color:var(--rose); color:var(--white); }
+  .co-step-label { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--warm-grey); }
+  .co-step.active .co-step-label { color:var(--espresso); font-weight:500; }
+  .co-step-line { flex:1; height:2px; background:var(--gold-light); margin:0 8px; margin-bottom:20px; transition:background 0.4s; min-width:60px; }
+  .co-step-line.done { background:var(--rose); }
+
+  .co-panel { background:var(--white); padding:36px; border:1px solid var(--gold-light); margin-bottom:20px; }
+  .co-panel-header { display:flex; align-items:center; gap:12px; margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid var(--gold-light); }
+  .co-panel-icon { font-size:1.5rem; }
+  .co-panel-title { font-size:1.5rem; }
+
+  .delivery-opt {
+    display:block; cursor:pointer; border:1px solid var(--gold-light);
+    transition:border-color 0.3s, background 0.3s;
+    padding:14px 18px;
+  }
+  .delivery-opt:has(input:checked) { border-color:var(--rose); background:rgba(196,117,106,0.05); }
+  .delivery-opt input { display:none; }
+  .delivery-opt-content { display:flex; justify-content:space-between; align-items:center; }
+  .delivery-opt-left { display:flex; align-items:center; gap:12px; }
+  .delivery-icon { font-size:1.3rem; }
+  .delivery-opt-left strong { display:block; font-size:0.85rem; font-weight:400; }
+  .delivery-opt-left small { font-size:0.72rem; color:var(--warm-grey); }
+  .delivery-price { font-size:0.9rem; color:var(--deep-rose); font-weight:400; }
+
+  .pay-tab {
+    padding:9px 18px; border:1px solid var(--gold-light); background:transparent;
+    font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.15em;
+    text-transform:uppercase; cursor:pointer; color:var(--warm-grey); transition:all 0.3s;
+  }
+  .pay-tab.active { background:var(--espresso); color:var(--cream); border-color:var(--espresso); }
+
+  .upi-app {
+    padding:10px 20px; border:1px solid var(--gold-light); cursor:pointer;
+    font-size:0.78rem; transition:all 0.3s; background:var(--cream);
+  }
+  .upi-app:hover, .upi-app.selected { border-color:var(--rose); background:rgba(196,117,106,0.08); }
+
+  .review-item-row {
+    display:flex; gap:14px; align-items:center; padding:12px 0;
+    border-bottom:1px solid var(--gold-light); font-size:0.85rem;
+  }
+  .review-item-row:last-child { border-bottom:none; }
+
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
@@ -899,6 +956,228 @@
   </footer>
 </div>
 
+<!-- ═══════════════════════════════════════════
+     PAGE: CHECKOUT
+════════════════════════════════════════════ -->
+<div class="page" id="page-checkout">
+  <div style="padding-top:80px; min-height:100vh; background:var(--ivory);">
+
+    <!-- Step Indicator -->
+    <div style="background:var(--white); border-bottom:1px solid var(--gold-light); padding:22px 60px;">
+      <div style="display:flex; align-items:center; justify-content:center; max-width:480px; margin:0 auto;">
+        <div class="co-step active" id="step-ind-1">
+          <div class="co-step-num">1</div>
+          <div class="co-step-label">Shipping</div>
+        </div>
+        <div class="co-step-line" id="line-1"></div>
+        <div class="co-step" id="step-ind-2">
+          <div class="co-step-num">2</div>
+          <div class="co-step-label">Payment</div>
+        </div>
+        <div class="co-step-line" id="line-2"></div>
+        <div class="co-step" id="step-ind-3">
+          <div class="co-step-num">3</div>
+          <div class="co-step-label">Confirm</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 340px; gap:28px; max-width:1040px; margin:0 auto; padding:36px 24px 80px;" id="co-layout">
+
+      <!-- LEFT: Steps -->
+      <div>
+
+        <!-- STEP 1: Shipping -->
+        <div id="co-step-1" class="co-panel">
+          <div class="co-panel-header">
+            <span class="co-panel-icon">📦</span>
+            <h2 class="co-panel-title">Shipping Information</h2>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>First Name *</label><input type="text" id="s-fname" placeholder="Priya"/></div>
+            <div class="form-group"><label>Last Name *</label><input type="text" id="s-lname" placeholder="Sharma"/></div>
+          </div>
+          <div class="form-group"><label>Email Address *</label><input type="email" id="s-email" placeholder="priya@example.com"/></div>
+          <div class="form-group"><label>Phone Number *</label><input type="tel" id="s-phone" placeholder="+91 98765 43210"/></div>
+          <div class="form-group"><label>Address Line 1 *</label><input type="text" id="s-addr1" placeholder="House / Flat No., Building Name"/></div>
+          <div class="form-group"><label>Address Line 2</label><input type="text" id="s-addr2" placeholder="Street, Area, Locality"/></div>
+          <div class="form-row">
+            <div class="form-group"><label>City *</label><input type="text" id="s-city" placeholder="Hyderabad"/></div>
+            <div class="form-group"><label>State *</label>
+              <select id="s-state">
+                <option value="">Select State</option>
+                <option>Telangana</option><option>Andhra Pradesh</option><option>Maharashtra</option>
+                <option>Karnataka</option><option>Tamil Nadu</option><option>Delhi</option>
+                <option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option>
+                <option>Kerala</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>PIN Code *</label><input type="text" id="s-pin" placeholder="500034" maxlength="6"/></div>
+            <div class="form-group"><label>Country</label><input type="text" value="India" readonly style="background:var(--ivory); color:var(--warm-grey);"/></div>
+          </div>
+          <div style="margin-top:8px; margin-bottom:24px;">
+            <div style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--warm-grey); margin-bottom:12px;">Delivery Method</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <label class="delivery-opt">
+                <input type="radio" name="delivery" value="standard" checked onchange="updateDelivery(this)"/>
+                <div class="delivery-opt-content">
+                  <div class="delivery-opt-left"><span class="delivery-icon">🚚</span><div><strong>Standard Delivery</strong><small>5–7 business days</small></div></div>
+                  <div class="delivery-price" id="del-std-price">Free</div>
+                </div>
+              </label>
+              <label class="delivery-opt">
+                <input type="radio" name="delivery" value="express" onchange="updateDelivery(this)"/>
+                <div class="delivery-opt-content">
+                  <div class="delivery-opt-left"><span class="delivery-icon">⚡</span><div><strong>Express Delivery</strong><small>1–2 business days</small></div></div>
+                  <div class="delivery-price">₹149</div>
+                </div>
+              </label>
+              <label class="delivery-opt">
+                <input type="radio" name="delivery" value="sameday" onchange="updateDelivery(this)"/>
+                <div class="delivery-opt-content">
+                  <div class="delivery-opt-left"><span class="delivery-icon">🏃</span><div><strong>Same-Day Delivery</strong><small>Order before 12pm · Hyderabad only</small></div></div>
+                  <div class="delivery-price">₹299</div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <button class="form-submit" onclick="goToStep(2)">Continue to Payment →</button>
+        </div>
+
+        <!-- STEP 2: Payment -->
+        <div id="co-step-2" class="co-panel" style="display:none;">
+          <div class="co-panel-header">
+            <span class="co-panel-icon">💳</span>
+            <h2 class="co-panel-title">Payment Details</h2>
+          </div>
+          <div style="display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap;">
+            <button class="pay-tab active" onclick="switchPayTab('card',this)">Credit / Debit Card</button>
+            <button class="pay-tab" onclick="switchPayTab('upi',this)">UPI</button>
+            <button class="pay-tab" onclick="switchPayTab('netbank',this)">Net Banking</button>
+            <button class="pay-tab" onclick="switchPayTab('cod',this)">Cash on Delivery</button>
+          </div>
+          <!-- Card -->
+          <div id="pay-card">
+            <div class="form-group"><label>Name on Card *</label><input type="text" id="p-cname" placeholder="PRIYA SHARMA"/></div>
+            <div class="form-group">
+              <label>Card Number *</label>
+              <div style="position:relative;">
+                <input type="text" id="p-cnum" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCard(this)" style="padding-right:60px;"/>
+                <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:1.2rem;" id="card-brand-icon">💳</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Expiry *</label><input type="text" id="p-exp" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"/></div>
+              <div class="form-group"><label>CVV *</label><input type="password" id="p-cvv" placeholder="•••" maxlength="4"/></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; font-size:0.78rem; color:var(--warm-grey);">
+              <input type="checkbox" id="save-card" style="accent-color:var(--rose); width:15px; height:15px;"/>
+              <label for="save-card">Save this card for future purchases</label>
+            </div>
+          </div>
+          <!-- UPI -->
+          <div id="pay-upi" style="display:none;">
+            <div class="form-group"><label>UPI ID *</label><input type="text" id="p-upi" placeholder="yourname@upi"/></div>
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+              <div class="upi-app" onclick="selectUpi(this)">🟢 GPay</div>
+              <div class="upi-app" onclick="selectUpi(this)">💜 PhonePe</div>
+              <div class="upi-app" onclick="selectUpi(this)">🔵 Paytm</div>
+              <div class="upi-app" onclick="selectUpi(this)">🇮🇳 BHIM</div>
+            </div>
+          </div>
+          <!-- Net Banking -->
+          <div id="pay-netbank" style="display:none;">
+            <div class="form-group"><label>Select Your Bank *</label>
+              <select id="p-bank">
+                <option value="">Choose Bank</option>
+                <option>State Bank of India</option><option>HDFC Bank</option><option>ICICI Bank</option>
+                <option>Axis Bank</option><option>Kotak Mahindra Bank</option><option>Yes Bank</option>
+                <option>Punjab National Bank</option><option>Bank of Baroda</option><option>Other</option>
+              </select>
+            </div>
+            <p style="font-size:0.78rem; color:var(--warm-grey); line-height:1.7;">You will be redirected to your bank's secure portal to complete the payment.</p>
+          </div>
+          <!-- COD -->
+          <div id="pay-cod" style="display:none;">
+            <div style="background:var(--ivory); border:1px solid var(--gold-light); padding:24px; border-left:4px solid var(--gold);">
+              <p style="font-size:0.88rem; line-height:1.8; color:var(--warm-grey);">💰 <strong style="color:var(--espresso);">Cash on Delivery</strong> is available.<br/>An additional ₹49 handling fee applies. Keep exact change ready.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:12px; margin-top:24px;">
+            <button class="btn-outline" onclick="goToStep(1)" style="flex:1; padding:14px; font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; color:var(--espresso); border-color:var(--gold-light);">← Back</button>
+            <button class="form-submit" onclick="goToStep(3)" style="flex:2; margin-top:0;">Review Order →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Review -->
+        <div id="co-step-3" class="co-panel" style="display:none;">
+          <div class="co-panel-header">
+            <span class="co-panel-icon">✅</span>
+            <h2 class="co-panel-title">Review & Place Order</h2>
+          </div>
+          <div style="margin-bottom:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <div style="font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold);">Shipping To</div>
+              <button onclick="goToStep(1)" style="font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; background:none; border:none; cursor:pointer; color:var(--rose);">Edit</button>
+            </div>
+            <div id="review-addr" style="font-size:0.88rem; color:var(--warm-grey); line-height:1.8; background:var(--ivory); padding:16px; border:1px solid var(--gold-light);"></div>
+          </div>
+          <div style="margin-bottom:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <div style="font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold);">Payment</div>
+              <button onclick="goToStep(2)" style="font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; background:none; border:none; cursor:pointer; color:var(--rose);">Edit</button>
+            </div>
+            <div id="review-pay" style="font-size:0.88rem; color:var(--warm-grey); background:var(--ivory); padding:16px; border:1px solid var(--gold-light);"></div>
+          </div>
+          <div style="margin-bottom:24px;">
+            <div style="font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); margin-bottom:10px;">Order Items</div>
+            <div id="review-items"></div>
+          </div>
+          <div style="background:var(--ivory); padding:14px 16px; border:1px solid var(--gold-light); margin-bottom:22px; font-size:0.78rem; color:var(--warm-grey); line-height:1.8;">
+            By placing this order you agree to LUMIÈRE's <span style="color:var(--rose); cursor:pointer;">Terms of Service</span> and <span style="color:var(--rose); cursor:pointer;">Privacy Policy</span>.
+          </div>
+          <div style="display:flex; gap:12px;">
+            <button class="btn-outline" onclick="goToStep(2)" style="flex:1; padding:14px; font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; color:var(--espresso); border-color:var(--gold-light);">← Back</button>
+            <button class="form-submit" onclick="placeOrder()" id="place-btn" style="flex:2; margin-top:0; background:var(--rose);">Place Order ✦</button>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div id="co-step-success" class="co-panel" style="display:none; text-align:center; padding:60px 40px;">
+          <div style="font-size:4rem; margin-bottom:20px;">🎉</div>
+          <h2 style="font-size:2.8rem; color:var(--rose); margin-bottom:12px;">Order Placed!</h2>
+          <p style="color:var(--warm-grey); font-size:0.9rem; line-height:1.8; margin-bottom:10px;">Thank you for shopping with LUMIÈRE. Your order is confirmed!</p>
+          <p style="font-size:0.82rem; color:var(--warm-grey); margin-bottom:30px;">Order ID: <strong style="color:var(--espresso);" id="order-id"></strong></p>
+          <div style="background:var(--ivory); border:1px solid var(--gold-light); padding:20px; margin-bottom:32px;">
+            <div style="font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">Estimated Delivery</div>
+            <div style="font-size:1.1rem; font-family:'Cormorant Garamond',serif;" id="est-delivery"></div>
+          </div>
+          <button class="btn-primary" onclick="showPage('shop')" style="padding:14px 36px; border:none; cursor:pointer; margin-right:10px;">Continue Shopping</button>
+          <button class="btn-outline" onclick="showPage('home')" style="padding:14px 36px; cursor:pointer; color:var(--espresso);">Home</button>
+        </div>
+
+      </div><!-- end left col -->
+
+      <!-- RIGHT: Summary Sidebar -->
+      <div id="co-summary-sidebar">
+        <div style="background:var(--white); border:1px solid var(--gold-light); padding:28px; position:sticky; top:100px;">
+          <div style="font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:18px;">Your Order</div>
+          <div id="co-cart-items" style="border-bottom:1px solid var(--gold-light); padding-bottom:16px; margin-bottom:16px;"></div>
+          <div id="co-totals"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer>
+    <div class="footer-bottom" style="border-top:none; padding-top:0;">
+      <div class="footer-copy">© 2025 LUMIÈRE. All rights reserved.</div>
+    </div>
+  </footer>
+</div>
+
 <script>
 // ── DATA ──
 const products = [
@@ -1036,8 +1315,186 @@ function addToCart(id) {
   const p = products.find(x=>x.id===id);
   if(p) showToast(`${p.name} added to bag 💄`);
 }
+// ── CHECKOUT STATE ──
+let coStep = 1;
+let deliveryFee = 0;
+let selectedPayTab = 'card';
+
 function checkoutFlow() {
-  showToast('Redirecting to checkout… 🎉');
+  coStep = 1;
+  renderCheckoutSidebar();
+  updateStepUI(1);
+  document.getElementById('co-step-1').style.display = 'block';
+  document.getElementById('co-step-2').style.display = 'none';
+  document.getElementById('co-step-3').style.display = 'none';
+  document.getElementById('co-step-success').style.display = 'none';
+  document.getElementById('co-summary-sidebar').style.display = 'block';
+  showPage('checkout');
+}
+
+function updateStepUI(step) {
+  for(let i=1;i<=3;i++){
+    const el = document.getElementById('step-ind-'+i);
+    el.classList.remove('active','done');
+    if(i < step) el.classList.add('done');
+    else if(i === step) el.classList.add('active');
+    if(i<3){
+      const line = document.getElementById('line-'+i);
+      line.classList.toggle('done', i < step);
+    }
+  }
+}
+
+function goToStep(step) {
+  if(step === 2) {
+    const fname = document.getElementById('s-fname').value.trim();
+    const email = document.getElementById('s-email').value.trim();
+    const phone = document.getElementById('s-phone').value.trim();
+    const addr  = document.getElementById('s-addr1').value.trim();
+    const city  = document.getElementById('s-city').value.trim();
+    const state = document.getElementById('s-state').value;
+    const pin   = document.getElementById('s-pin').value.trim();
+    if(!fname||!email||!phone||!addr||!city||!state||!pin){
+      showToast('Please fill in all required shipping fields ✦'); return;
+    }
+    if(!/\S+@\S+\.\S+/.test(email)){ showToast('Enter a valid email address'); return; }
+    if(pin.length!==6||!/^\d{6}$/.test(pin)){ showToast('Enter a valid 6-digit PIN code'); return; }
+  }
+  if(step === 3) {
+    if(selectedPayTab==='card'){
+      const cname = document.getElementById('p-cname').value.trim();
+      const cnum  = document.getElementById('p-cnum').value.replace(/\s/g,'');
+      const exp   = document.getElementById('p-exp').value.trim();
+      const cvv   = document.getElementById('p-cvv').value.trim();
+      if(!cname||cnum.length<16||exp.length<5||cvv.length<3){
+        showToast('Please enter complete card details ✦'); return;
+      }
+    } else if(selectedPayTab==='upi'){
+      const upi = document.getElementById('p-upi').value.trim();
+      if(!upi||!upi.includes('@')){ showToast('Enter a valid UPI ID'); return; }
+    } else if(selectedPayTab==='netbank'){
+      const bank = document.getElementById('p-bank').value;
+      if(!bank){ showToast('Please select your bank'); return; }
+    }
+    buildReview();
+  }
+  coStep = step;
+  updateStepUI(step);
+  for(let i=1;i<=3;i++){
+    const el = document.getElementById('co-step-'+i);
+    if(el) el.style.display = (i===step)?'block':'none';
+  }
+  document.getElementById('co-step-success').style.display = 'none';
+  window.scrollTo(0,0);
+}
+
+function buildReview() {
+  const fname = document.getElementById('s-fname').value.trim();
+  const lname = document.getElementById('s-lname').value.trim();
+  const email = document.getElementById('s-email').value.trim();
+  const phone = document.getElementById('s-phone').value.trim();
+  const addr1 = document.getElementById('s-addr1').value.trim();
+  const addr2 = document.getElementById('s-addr2').value.trim();
+  const city  = document.getElementById('s-city').value.trim();
+  const state = document.getElementById('s-state').value;
+  const pin   = document.getElementById('s-pin').value.trim();
+  document.getElementById('review-addr').innerHTML =
+    `<strong>${fname} ${lname}</strong><br/>${email} · ${phone}<br/>${addr1}${addr2?' · '+addr2:''}<br/>${city}, ${state} – ${pin}, India`;
+
+  let payHtml = '';
+  if(selectedPayTab==='card'){
+    const last4 = document.getElementById('p-cnum').value.replace(/\s/g,'').slice(-4);
+    payHtml = `💳 Card ending in <strong>••••${last4}</strong>`;
+  } else if(selectedPayTab==='upi'){
+    payHtml = `📱 UPI — <strong>${document.getElementById('p-upi').value}</strong>`;
+  } else if(selectedPayTab==='netbank'){
+    payHtml = `🏦 Net Banking — <strong>${document.getElementById('p-bank').value}</strong>`;
+  } else {
+    payHtml = `💵 Cash on Delivery (+₹49 handling fee)`;
+  }
+  document.getElementById('review-pay').innerHTML = payHtml;
+
+  document.getElementById('review-items').innerHTML = cart.map(item=>`
+    <div class="review-item-row">
+      <div style="font-size:1.6rem;">${item.emoji}</div>
+      <div style="flex:1;">
+        <div style="font-weight:400;">${item.name}</div>
+        <div style="font-size:0.75rem; color:var(--warm-grey);">Qty: ${item.qty}</div>
+      </div>
+      <div style="color:var(--deep-rose);">₹${(item.price*item.qty).toLocaleString()}</div>
+    </div>`).join('');
+}
+
+function placeOrder() {
+  const btn = document.getElementById('place-btn');
+  btn.textContent = 'Processing…';
+  btn.disabled = true;
+  setTimeout(()=>{
+    const orderId = 'LUM-' + Date.now().toString().slice(-8).toUpperCase();
+    const delivery = document.querySelector('input[name="delivery"]:checked').value;
+    const days = delivery==='sameday' ? 'Today by 8pm' : delivery==='express' ? 'Within 1–2 business days' : 'Within 5–7 business days';
+    document.getElementById('order-id').textContent = orderId;
+    document.getElementById('est-delivery').textContent = days;
+    for(let i=1;i<=3;i++){
+      const el = document.getElementById('co-step-'+i);
+      if(el) el.style.display='none';
+    }
+    document.getElementById('co-step-success').style.display='block';
+    document.getElementById('co-summary-sidebar').style.display='none';
+    updateStepUI(4);
+    window.scrollTo(0,0);
+  }, 1800);
+}
+
+function renderCheckoutSidebar() {
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const gst = Math.round(subtotal*0.18);
+  const total = subtotal + gst + deliveryFee + (selectedPayTab==='cod'?49:0);
+  document.getElementById('co-cart-items').innerHTML = cart.map(i=>`
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px; font-size:0.82rem;">
+      <div style="font-size:1.4rem; width:36px; text-align:center; background:var(--ivory); padding:4px; flex-shrink:0;">${i.emoji}</div>
+      <div style="flex:1;"><div style="font-weight:400;">${i.name}</div><div style="color:var(--warm-grey); font-size:0.72rem;">×${i.qty}</div></div>
+      <div style="color:var(--deep-rose);">₹${(i.price*i.qty).toLocaleString()}</div>
+    </div>`).join('');
+  document.getElementById('co-totals').innerHTML = `
+    <div class="summary-row"><span>Subtotal</span><span>₹${subtotal.toLocaleString()}</span></div>
+    <div class="summary-row"><span>Delivery</span><span>${deliveryFee===0?'Free':'₹'+deliveryFee}</span></div>
+    <div class="summary-row"><span>GST (18%)</span><span>₹${gst.toLocaleString()}</span></div>
+    <div class="summary-row total"><span>Total</span><span>₹${total.toLocaleString()}</span></div>
+    <div style="margin-top:16px; font-size:0.7rem; color:var(--warm-grey); text-align:center; letter-spacing:0.1em;">🔒 Encrypted & Secure</div>`;
+}
+
+function updateDelivery(el) {
+  deliveryFee = el.value==='express' ? 149 : el.value==='sameday' ? 299 : 0;
+  renderCheckoutSidebar();
+}
+
+function switchPayTab(tab, btn) {
+  selectedPayTab = tab;
+  document.querySelectorAll('.pay-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['card','upi','netbank','cod'].forEach(t=>{
+    document.getElementById('pay-'+t).style.display = (t===tab)?'block':'none';
+  });
+  renderCheckoutSidebar();
+}
+
+function formatCard(el) {
+  let val = el.value.replace(/\D/g,'').slice(0,16);
+  el.value = val.replace(/(.{4})/g,'$1 ').trim();
+  const icon = document.getElementById('card-brand-icon');
+  icon.textContent = val.startsWith('4') ? '💳' : val.startsWith('5') ? '💳' : val.startsWith('37') ? '💳' : '💳';
+}
+
+function formatExpiry(el) {
+  let val = el.value.replace(/\D/g,'').slice(0,4);
+  if(val.length>=2) val = val.slice(0,2) + ' / ' + val.slice(2);
+  el.value = val;
+}
+
+function selectUpi(el) {
+  document.querySelectorAll('.upi-app').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
 }
 
 // ── CONTACT FORM ──
